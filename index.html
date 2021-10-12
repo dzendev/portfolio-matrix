@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Калькулятор умножения матриц</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/fonts.css">
+	<!-- <script src="js/jquery-2.2.2.min.js"></script> -->
+	<script src="js/jquery-1.9.0.min.js"></script>
+	<script src="js/matrix.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="block-control">
+			<button id="mult-matrix"><span>Умножить&nbsp;матрицы</span></button>
+			<button id="clean-matrix"><span class="icon icon-clear"></span>Очистить матрицы</button>
+			<button id="swap-matrix"><span class="icon icon-revers"></span>
+			Поменять матрицы местами</button>
+			<div id="generate-matrix">
+				<input type="radio" id="radio-matA" name="matsel" value="matA" checked>
+				<label for="matA">Матрица A</label>
+				<input type="radio" id="radio-matB" name="matsel" value="matB">
+				<label for="matA">Матрица B</label>
+				<br>
+				<button id="add-tr"><span class="icon icon-plus"></span>Добавить</button><button id="remove-tr"><span class="icon icon-minus"></span>Удалить</button>строки
+				<br>
+				<button id="add-td"><span class="icon icon-plus"></span>Добавить</button><button id="remove-td"><span class="icon icon-minus"></span>Удалить</button>столбцы
+			</div>
+			<div id="error-matrix"></div>
+		</div>
+		<div class="block-matrix">
+			<div class="row">
+				<div class="wrap-matrix">
+					<div class="lwm"></div>
+					<div class="cwm">
+						<div id="matC"></div>
+					</div>
+					<div class="rwm"></div>
+				</div>
+				<div class="wrap-matrix">
+					<div class="lwm"></div>
+					<div class="cwm">
+						<div id="matA"></div>
+					</div>
+					<div class="rwm"></div>
+					<div class="name-matrix">A</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="wrap-matrix">
+					<div class="lwm"></div>
+					<div class="cwm">
+						<div id="matB"></div>
+						<div class="name-matrix">B</div>
+					</div>
+					<div class="rwm"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
