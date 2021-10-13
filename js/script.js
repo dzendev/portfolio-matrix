@@ -2,13 +2,17 @@ import { multiplyMatrix } from './matrix.js'
 
 var trA, trB, tdA, tdB; // размеры матриц
 
+const matA = document.querySelector('#matA');
+const matB = document.querySelector('#matB');
+const matC = document.querySelector('#matC');
+
 // вставялем таблицы в html
 function inserTable(itrA, itdA, itrB, itdB) {
 	trA = itrA, tdA = itdA;
 	trB = itrB, tdB = itdB;
-	$('#matA').html(generateTable(trA, tdA, 'a'));
-	$('#matB').html(generateTable(trB, tdB, 'b'));
-	$('#matC').html(generateTable(trA, tdB, 'c'));
+	matA.innerHTML = generateTable(trA, tdA, 'a');
+	matB.innerHTML = generateTable(trB, tdB, 'b');
+	matC.innerHTML = generateTable(trA, tdB, 'c');
 }
 
 // генерация таблицы
