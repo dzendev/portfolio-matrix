@@ -25,34 +25,20 @@ inserTable(trA, tdA, trB, tdB);
 // Добавление строк
 const addTr = document.querySelector('#add-tr');
 addTr.addEventListener('click', (event) => {
-	if(radioMatA.checked){
-		trA++;
-		if(trA >= 2 && trA <= 10){
-			// var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			// setValMatrix(matrixVal[0], 'matA');
-			// setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
+	if((trA + 1) >= 2 && (trA + 1) <= 10 && (trB + 1) >= 2 && (trB + 1) <= 10){
+		// var matrixVal = getValMatrix();
+		if(radioMatA.checked){
+			inserTable(++trA, tdA, trB, tdB);
 		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			trA--;
+			inserTable(trA, tdA, ++trB, tdB);
 		}
+		// setValMatrix(matrixVal[0], 'matA');
+		// setValMatrix(matrixVal[1], 'matB');
+		blockControl.classList.remove('error-mes');
+		errorMatrix.innerText = '';
 	} else {
-		trB++;
-		if(trB >= 2 && trB <= 10){
-			// var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			// setValMatrix(matrixVal[0], 'matA');
-			// setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
-		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			trB--;
-		}
+		blockControl.classList.add('error-mes');
+		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
 	}
 	return false;
 });
@@ -60,104 +46,61 @@ addTr.addEventListener('click', (event) => {
 // Удаление строк
 const removeTr = document.querySelector('#remove-tr'); // удалить строку
 removeTr.addEventListener('click', (event) => {
-	if(radioMatA.checked){
-		trA--;
-		if(trA >= 2 && trA <= 10){
-			var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			setValMatrix(matrixVal[0], 'matA');
-			setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
+	if((trA - 1) >= 2 && (trA - 1) <= 10 && (trB - 1) >= 2 && (trB - 1) <= 10){
+		// var matrixVal = getValMatrix();
+		if(radioMatA.checked){
+			inserTable(--trA, tdA, trB, tdB);
 		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			trA++;
+			inserTable(trA, tdA, --trB, tdB);
 		}
+		// setValMatrix(matrixVal[0], 'matA');
+		// setValMatrix(matrixVal[1], 'matB');
+		blockControl.classList.remove('error-mes');
+		errorMatrix.innerText = '';
 	} else {
-		trB--;
-		if(trB >= 2 && trB <= 10){
-			var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			setValMatrix(matrixVal[0], 'matA');
-			setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
-		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			trB++;
-		}
+		blockControl.classList.add('error-mes');
+		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
 	}
-
 	return false;
 });
 
 // Добавление столбцоы
 const addTd = document.querySelector('#add-td');
 addTd.addEventListener('click', (event) => {
-	if(radioMatA.checked){
-		tdA++;
-		if(tdA >= 2 && tdA <= 10){
-			// var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			// setValMatrix(matrixVal[0], 'matA');
-			// setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
+	if((tdA + 1) >= 2 && (tdA + 1) <= 10 && (tdB + 1) >= 2 && (tdB + 1) <= 10){
+		// var matrixVal = getValMatrix();
+		if(radioMatA.checked){
+			inserTable(trA, ++tdA, trB, tdB);
 		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			tdA--;
+			inserTable(trA, tdA, trB, ++tdB);
 		}
+		// setValMatrix(matrixVal[0], 'matA');
+		// setValMatrix(matrixVal[1], 'matB');
+		blockControl.classList.remove('error-mes');
+		errorMatrix.innerText = '';
 	} else {
-		tdB++;
-		if(tdB >= 2 && tdB <= 10){
-			// var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			// setValMatrix(matrixVal[0], 'matA');
-			// setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
-		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			tdB--;
-		}
+		blockControl.classList.add('error-mes');
+		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
 	}
 	return false;
 });
 // Удаление столбцов
 const removeTd = document.querySelector('#remove-td');
 removeTd.addEventListener('click', (event) => {
-	if(radioMatA.checked){
-		tdA--;
-		if(tdA >= 2 && tdA <= 10){
-			var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			setValMatrix(matrixVal[0], 'matA');
-			setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
+	if((tdA - 1) >= 2 && (tdA - 1) <= 10 && (tdB - 1) >= 2 && (tdB - 1) <= 10){
+		// var matrixVal = getValMatrix();
+		if(radioMatA.checked){
+			inserTable(trA, --tdA, trB, tdB);
 		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			tdA++;
+			inserTable(trA, tdA, trB, --tdB);
 		}
+		// setValMatrix(matrixVal[0], 'matA');
+		// setValMatrix(matrixVal[1], 'matB');
+		blockControl.classList.remove('error-mes');
+		errorMatrix.innerText = '';
 	} else {
-		tdB--;
-		if(tdB >= 2 && tdB <= 10){
-			var matrixVal = getValMatrix();
-			inserTable(trA, tdA, trB, tdB);
-			setValMatrix(matrixVal[0], 'matA');
-			setValMatrix(matrixVal[1], 'matB');
-			blockControl.classList.remove('error-mes');
-			errorMatrix.innerText = '';
-		} else {
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
-			tdB++;
-		}
+		blockControl.classList.add('error-mes');
+		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
 	}
 	return false;
 });
