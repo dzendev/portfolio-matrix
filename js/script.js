@@ -1,114 +1,29 @@
-import { multiplyMatrix } from './matrix.js'
+import { multiplyMatrix } from './matrix.js';
+import { inserTable, generateTable, validateMatrix, getValMatrix, setValMatrix } from './table.js';
 
-var trA, trB, tdA, tdB; // размеры матриц
-
+// Матрицы
 const matA = document.querySelector('#matA');
 const matB = document.querySelector('#matB');
 const matC = document.querySelector('#matC');
 
-// вставялем таблицы в html
-function inserTable(itrA, itdA, itrB, itdB) {
-	trA = itrA, tdA = itdA;
-	trB = itrB, tdB = itdB;
-	matA.innerHTML = generateTable(trA, tdA, 'a');
-	matB.innerHTML = generateTable(trB, tdB, 'b');
-	matC.innerHTML = generateTable(trA, tdB, 'c');
-}
+// секция с элементами управления
+const blockControl = document.querySelector('#block-control');
+// вывод ошибок
+const errorMatrix = document.querySelector('#error-matrix');
+// переключение между матрицами A и B
+const radioMatA = document.querySelector('#radio-matA');
 
-// генерация таблицы
-function generateTable(tr, td, tableName) {
-	var strTable = '<table>';
-	for (var i = 0; i < tr; i++) {
-		strTable += "<tr>";
-		for (var j = 0; j < td; j++) {
-			// s = i + j + 1;
-			// strTable += '<td><input type="number" value="" placeholder="' + tableName + i + j + '" max="10" min="-10"'+ (tableName == 'c' ? ' disabled' : '') + '></td>';
-			strTable += '<td><input type="text" value="" placeholder="' + tableName + i + j + '" ' + (tableName == 'c' ? ' disabled' : '') + '></td>';
-		}
-		 strTable += "</tr>";
-	}
-	return strTable += "</table>";
-}
-// Валидация перед умножением
-function validateMatrix() {
-	if(tdA == trB){
-		return true;
-	} else {
-		blockControl.classList.add('error-mes');
-		errorMatrix.innerText = 'Число столбцов первой матрицы должно равняться числу строк второй матрицы';
-		return false;
-	}
-}
-// Получить значение матриц
-function getValMatrix() {
-	const matrixAinput = document.querySelectorAll('#matA tr');
-	const matrixBinput = document.querySelectorAll('#matB tr');
-	var matrixA = [];
-	var matrixB = [];
-	var martixAB = [];
-	for (var i = 0; i < trA; i++) {
-		matrixA[i] = []
-		for (var j = 0; j < tdA; j++) {
-			// если значение будет равно пустой строке,
-			// то во время умножения оно будет преобразовано
-			// к числовому типу и станет равна 0
-			// особенность javascript
-			// matrixA[i][j] = $(matrixAinput).eq(i).find("input").eq(j).val();
-			matrixA[i][j] = matrixAinput[i].querySelectorAll("input")[j].value;
-		}
-	}
-	for (var i = 0; i < trB; i++) {
-		matrixB[i] = []
-		for (var j = 0; j < tdB; j++) {
-			// matrixB[i][j] = $(matrixBinput).eq(i).find("input").eq(j).val();
-			matrixB[i][j] = matrixBinput[i].querySelectorAll("input")[j].value;
-		}
-	}
-	return martixAB = [matrixA , matrixB];
-}
-// Вывести результат умножения
-function setValMatrix(matrix, nameMatrix) {
-	// var matrixCinput = $('#matC tr');
-	// var matrixInput = $('#' + nameMatrix + ' tr');
-	var matrixInput = document.querySelectorAll(`#${nameMatrix} tr`);
-	if(nameMatrix == 'matC'){
-		for (var i = 0; i < trA; i++) {
-			for (var j = 0; j < tdB; j++) {
-				// $(matrixInput).eq(i).find("input").eq(j).val(matrix[i][j]);
-				matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
-			}
-		}
-	} else {
-		if(nameMatrix == 'matA'){
-			for (var i = 0; i < trA; i++) {
-				for (var j = 0; j < tdA; j++) {
-					// $(matrixInput).eq(i).find("input").eq(j).val(matrix[i][j]);
-					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
-				}
-			}
-		} else {
-			for (var i = 0; i < trB; i++) {
-				for (var j = 0; j < tdB; j++) {
-					// $(matrixInput).eq(i).find("input").eq(j).val(matrix[i][j]);
-					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
-				}
-			}
-		}
-	}
-}
+// размер матрицы
+let trA = 4;
+let tdA = 4;
+let trB = 4;
+let tdB = 4;
 
 // генерируем начальные матрицы
-inserTable(4, 4, 4, 4);
-/*
-	Управление
-*/
-const blockControl = document.querySelector('#block-control');
-const errorMatrix = document.querySelector('#error-matrix');
-const radioMatA = document.querySelector('#radio-matA');
+inserTable(trA, tdA, trB, tdB);
 
 // Добавление строк
 const addTr = document.querySelector('#add-tr');
-
 addTr.addEventListener('click', (event) => {
 	if(radioMatA.checked){
 		trA++;
@@ -143,8 +58,7 @@ addTr.addEventListener('click', (event) => {
 });
 
 // Удаление строк
-const removeTr = document.querySelector('#remove-tr');
-
+const removeTr = document.querySelector('#remove-tr'); // удалить строку
 removeTr.addEventListener('click', (event) => {
 	if(radioMatA.checked){
 		trA--;
@@ -178,9 +92,9 @@ removeTr.addEventListener('click', (event) => {
 
 	return false;
 });
+
 // Добавление столбцоы
 const addTd = document.querySelector('#add-td');
-
 addTd.addEventListener('click', (event) => {
 	if(radioMatA.checked){
 		tdA++;
@@ -215,7 +129,6 @@ addTd.addEventListener('click', (event) => {
 });
 // Удаление столбцов
 const removeTd = document.querySelector('#remove-td');
-
 removeTd.addEventListener('click', (event) => {
 	if(radioMatA.checked){
 		tdA--;
@@ -251,7 +164,6 @@ removeTd.addEventListener('click', (event) => {
 
 // перемножить матрицы
 const multMatrix = document.querySelector('#mult-matrix');
-
 multMatrix.addEventListener("click", (event) => {
 	if( validateMatrix() ){
 		var valMatrixAB = getValMatrix();
@@ -263,7 +175,6 @@ multMatrix.addEventListener("click", (event) => {
 
 // Очистить матрицы
 const cleanMatrix = document.querySelector('#clean-matrix');
-
 cleanMatrix.addEventListener("click", (event) => {
 	inserTable(trA, tdA, trB, tdB);
 });
@@ -278,6 +189,7 @@ const blockMatrix = document.querySelector('.block-matrix');
 
 blockMatrix.onclick = function(event) {
 	let input = event.target.closest('input'); // (1)
+	// if(!event.target.contains('input')) return;j
 	if (!input) return; // (2)
 	highlight(input); // (4)
 };
@@ -316,8 +228,7 @@ function highlight(input) {
 }
 
 // Поменять матрицы
-const swapMatrix = document.querySelector('#swap-matrix');
-
+const swapMatrix = document.querySelector('#swap-matrix'); // поменять матрицы местами
 swapMatrix.addEventListener("click", (event) => {
 	// Менять местами матрицы можно только одинакового размера с одинаковым числом строк и столбцов
 	// if(trA == tdA && trB == tdB && trA == trB){
