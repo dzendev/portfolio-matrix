@@ -1,5 +1,8 @@
+import EventEmitter from './util.js';
 import { multiplyMatrix } from './matrix.js';
 import { inserTable, generateTable, validateMatrix, getValMatrix, setValMatrix } from './table.js';
+
+let emitter = new EventEmitter();
 
 // Матрицы
 const matA = document.querySelector('#matA');
@@ -12,6 +15,16 @@ const blockControl = document.querySelector('#block-control');
 const errorMatrix = document.querySelector('#error-matrix');
 // переключение между матрицами A и B
 const radioMatA = document.querySelector('#radio-matA');
+
+emitter.on('error-matrix', data => {
+	blockControl.classList.add('error-mes');
+	errorMatrix.innerText = data.textError;
+});
+
+emitter.on('valid-matrix', data => {
+	blockControl.classList.remove('error-mes');
+	errorMatrix.innerText = '';
+});
 
 // размер матрицы
 let trA = 4;
@@ -34,11 +47,9 @@ addTr.addEventListener('click', (event) => {
 		}
 		// setValMatrix(matrixVal[0], 'matA');
 		// setValMatrix(matrixVal[1], 'matB');
-		blockControl.classList.remove('error-mes');
-		errorMatrix.innerText = '';
+		emitter.emit('valid-matrix');
 	} else {
-		blockControl.classList.add('error-mes');
-		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
+		emitter.emit('error-matrix', {textError: "Число строк должно быть в диапазоне от 2 до 10"});
 	}
 	return false;
 });
@@ -55,11 +66,9 @@ removeTr.addEventListener('click', (event) => {
 		}
 		// setValMatrix(matrixVal[0], 'matA');
 		// setValMatrix(matrixVal[1], 'matB');
-		blockControl.classList.remove('error-mes');
-		errorMatrix.innerText = '';
+		emitter.emit('valid-matrix');
 	} else {
-		blockControl.classList.add('error-mes');
-		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
+		emitter.emit('error-matrix', {textError: "Число строк должно быть в диапазоне от 2 до 10"});
 	}
 	return false;
 });
@@ -76,14 +85,13 @@ addTd.addEventListener('click', (event) => {
 		}
 		// setValMatrix(matrixVal[0], 'matA');
 		// setValMatrix(matrixVal[1], 'matB');
-		blockControl.classList.remove('error-mes');
-		errorMatrix.innerText = '';
+		emitter.emit('valid-matrix');
 	} else {
-		blockControl.classList.add('error-mes');
-		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
+		emitter.emit('error-matrix', {textError: "Число столбцов должно быть в диапазоне от 2 до 10"});
 	}
 	return false;
 });
+
 // Удаление столбцов
 const removeTd = document.querySelector('#remove-td');
 removeTd.addEventListener('click', (event) => {
@@ -92,15 +100,14 @@ removeTd.addEventListener('click', (event) => {
 		if(radioMatA.checked){
 			inserTable(trA, --tdA, trB, tdB);
 		} else {
-			inserTable(trA, tdA, trB, --tdB);
+			inserTable(trA, tdA, trB,
+				--tdB);
 		}
 		// setValMatrix(matrixVal[0], 'matA');
 		// setValMatrix(matrixVal[1], 'matB');
-		blockControl.classList.remove('error-mes');
-		errorMatrix.innerText = '';
+		emitter.emit('valid-matrix');
 	} else {
-		blockControl.classList.add('error-mes');
-		errorMatrix.innerText = 'Число столбцов и строк должно быть в диапазоне от 2 до 10';
+		emitter.emit('error-matrix', {textError: "Число столбцов должно быть в диапазоне от 2 до 10"});
 	}
 	return false;
 });
@@ -130,43 +137,48 @@ cleanMatrix.addEventListener("click", (event) => {
 const btn = document.querySelectorAll('button');
 const blockMatrix = document.querySelector('.block-matrix');
 
+emitter.on('error-input', data => {
+	blockControl.classList.remove('focus-bg');
+	blockControl.classList.add('error-mes');
+	errorMatrix.innerText = data.textError;
+	btn.forEach(button => button.setAttribute("disabled", "disabled"))
+});
+
+emitter.on('valid-input', data => {
+	blockControl.classList.remove('error-mes');
+	blockControl.classList.remove('focus-bg');
+	errorMatrix.innerText = '';
+	btn.forEach(button => button.removeAttribute("disabled"))
+});
+
 blockMatrix.onclick = function(event) {
 	let input = event.target.closest('input'); // (1)
 	// if(!event.target.contains('input')) return;j
 	if (!input) return; // (2)
-	highlight(input); // (4)
+	blockControl.classList.add('focus-bg');
+	validInput(input); // (4)
 };
 
-function highlight(input) {
-	blockControl.classList.add('focus-bg');
-	input.onblur = function(){
+function validInput(input) {
+	input.oninput = function(){
 		if (isNaN(input.value)) { // введено не число
 			input.classList.add('error-valid'); // красная рамка
 			input.focus(); // фокус всегда будет на инпуте пока не будет введено число
-			blockControl.classList.remove('focus-bg');
-			blockControl.classList.add('error-mes');
-			errorMatrix.innerText = 'Введено не число';
 			// $('#mult-matrix').prop( "disabled", true );
-			btn.forEach(button => button.setAttribute("disabled", "disabled"))
-		} else {
-			if(input.value >= -10 && input.value <=10){
-				input.classList.remove('error-valid');
-				blockControl.classList.remove('error-mes');
-				blockControl.classList.remove('focus-bg');
-				errorMatrix.innerText = '';
-				// $('#mult-matrix').prop( "disabled", false );
-				// $('button').prop( "disabled", false );
-				btn.forEach(button => button.removeAttribute("disabled"))
-			} else {
-				input.classList.add('error-valid'); // красная рамка
-				input.focus(); // фокус всегда будет на инпуте пока не будет введено число
-				blockControl.classList.remove('focus-bg');
-				blockControl.classList.add('error-mes');
-				errorMatrix.innerText = 'Число должно быть от -10 до 10';
-				// $('#mult-matrix').prop( "disabled", true );
-				btn.forEach(button => button.setAttribute("disabled", "disabled"))
-			}
+			emitter.emit('error-input', {textError: 'Введено не число' });
+			return;
 		}
+
+		if(input.value < -10 || input.value > 10){
+			input.classList.add('error-valid'); // красная рамка
+			input.focus(); // фокус всегда будет на инпуте пока не будет введено число
+			// $('#mult-matrix').prop( "disabled", true );
+			emitter.emit('error-input', {textError: 'Число должно быть от -10 до 10' });
+			return;
+		}
+
+		input.classList.remove('error-valid'); // красная рамка
+		emitter.emit('valid-input', {textError: 'Число должно быть от -10 до 10' });
 	};
 }
 
