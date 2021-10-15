@@ -1,6 +1,6 @@
+import { inserTable, generateTable, getValMatrix, setValMatrix } from './table.js';
 import EventEmitter from './util.js';
 import { multiplyMatrix } from './matrix.js';
-import { inserTable, generateTable, validateMatrix, getValMatrix, setValMatrix } from './table.js';
 
 let emitter = new EventEmitter();
 
@@ -115,11 +115,14 @@ removeTd.addEventListener('click', (event) => {
 // перемножить матрицы
 const multMatrix = document.querySelector('#mult-matrix');
 multMatrix.addEventListener("click", (event) => {
-	if( validateMatrix() ){
+	if( tdA == trB ){
 		var valMatrixAB = getValMatrix();
 		var result = multiplyMatrix(valMatrixAB[0], valMatrixAB[1]);
 		setValMatrix(result, 'matC');
 		return true;
+	} else {
+		emitter.emit('error-matrix', {textError: "Число столбцов первой матрицы должно равняться числу строк второй матрицы"});
+		return false;
 	}
 });
 

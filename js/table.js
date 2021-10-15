@@ -29,17 +29,6 @@ export function generateTable(tr, td, tableName) {
 	return strTable += "</table>";
 }
 
-// Валидация перед умножением
-export function validateMatrix() {
-	if(tdA == trB){
-		return true;
-	} else {
-		blockControl.classList.add('error-mes');
-		errorMatrix.innerText = 'Число столбцов первой матрицы должно равняться числу строк второй матрицы';
-		return false;
-	}
-}
-
 // Получить значение матриц
 export function getValMatrix() {
 	const matrixAinput = document.querySelectorAll('#matA tr');
@@ -54,14 +43,12 @@ export function getValMatrix() {
 			// то во время умножения оно будет преобразовано
 			// к числовому типу и станет равна 0
 			// особенность javascript
-			// matrixA[i][j] = $(matrixAinput).eq(i).find("input").eq(j).val();
 			matrixA[i][j] = matrixAinput[i].querySelectorAll("input")[j].value;
 		}
 	}
 	for (var i = 0; i < trB; i++) {
 		matrixB[i] = []
 		for (var j = 0; j < tdB; j++) {
-			// matrixB[i][j] = $(matrixBinput).eq(i).find("input").eq(j).val();
 			matrixB[i][j] = matrixBinput[i].querySelectorAll("input")[j].value;
 		}
 	}
@@ -76,7 +63,6 @@ export function setValMatrix(matrix, nameMatrix) {
 	if(nameMatrix == 'matC'){
 		for (var i = 0; i < trA; i++) {
 			for (var j = 0; j < tdB; j++) {
-				// $(matrixInput).eq(i).find("input").eq(j).val(matrix[i][j]);
 				matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 			}
 		}
@@ -84,14 +70,12 @@ export function setValMatrix(matrix, nameMatrix) {
 		if(nameMatrix == 'matA'){
 			for (var i = 0; i < trA; i++) {
 				for (var j = 0; j < tdA; j++) {
-					// $(matrixInput).eq(i).find("input").eq(j).val(matrix[i][j]);
 					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 				}
 			}
 		} else {
 			for (var i = 0; i < trB; i++) {
 				for (var j = 0; j < tdB; j++) {
-					// $(matrixInput).eq(i).find("input").eq(j).val(matrix[i][j]);
 					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 				}
 			}
