@@ -1,9 +1,4 @@
 let trA, trB, tdA, tdB; // размеры матриц
-// размеры матриц
-// export let trA;
-// export let trB;
-// export let tdA;
-// export let tdB;
 
 // вставялем таблицы в html
 export function inserTable(itrA, itdA, itrB, itdB) {
@@ -16,12 +11,10 @@ export function inserTable(itrA, itdA, itrB, itdB) {
 
 // генерация таблицы
 export function generateTable(tr, td, tableName) {
-	var strTable = '<table>';
-	for (var i = 0; i < tr; i++) {
+	let strTable = '<table>';
+	for (let i = 0; i < tr; i++) {
 		strTable += "<tr>";
-		for (var j = 0; j < td; j++) {
-			// s = i + j + 1;
-			// strTable += '<td><input type="number" value="" placeholder="' + tableName + i + j + '" max="10" min="-10"'+ (tableName == 'c' ? ' disabled' : '') + '></td>';
+		for (let j = 0; j < td; j++) {
 			strTable += '<td><input type="text" value="" placeholder="' + tableName + i + j + '" ' + (tableName == 'c' ? ' disabled' : '') + '></td>';
 		}
 		 strTable += "</tr>";
@@ -33,12 +26,12 @@ export function generateTable(tr, td, tableName) {
 export function getValMatrix() {
 	const matrixAinput = document.querySelectorAll('#matA tr');
 	const matrixBinput = document.querySelectorAll('#matB tr');
-	var matrixA = [];
-	var matrixB = [];
-	var martixAB = [];
-	for (var i = 0; i < trA; i++) {
+	let matrixA = [];
+	let matrixB = [];
+	let martixAB = [];
+	for (let i = 0; i < trA; i++) {
 		matrixA[i] = []
-		for (var j = 0; j < tdA; j++) {
+		for (let j = 0; j < tdA; j++) {
 			// если значение будет равно пустой строке,
 			// то во время умножения оно будет преобразовано
 			// к числовому типу и станет равна 0
@@ -46,9 +39,9 @@ export function getValMatrix() {
 			matrixA[i][j] = matrixAinput[i].querySelectorAll("input")[j].value;
 		}
 	}
-	for (var i = 0; i < trB; i++) {
+	for (let i = 0; i < trB; i++) {
 		matrixB[i] = []
-		for (var j = 0; j < tdB; j++) {
+		for (let j = 0; j < tdB; j++) {
 			matrixB[i][j] = matrixBinput[i].querySelectorAll("input")[j].value;
 		}
 	}
@@ -57,25 +50,23 @@ export function getValMatrix() {
 
 // Вывести результат умножения
 export function setValMatrix(matrix, nameMatrix) {
-	// var matrixCinput = $('#matC tr');
-	// var matrixInput = $('#' + nameMatrix + ' tr');
-	var matrixInput = document.querySelectorAll(`#${nameMatrix} tr`);
+	let matrixInput = document.querySelectorAll(`#${nameMatrix} tr`);
 	if(nameMatrix == 'matC'){
-		for (var i = 0; i < trA; i++) {
-			for (var j = 0; j < tdB; j++) {
+		for (let i = 0; i < trA; i++) {
+			for (let j = 0; j < tdB; j++) {
 				matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 			}
 		}
 	} else {
 		if(nameMatrix == 'matA'){
-			for (var i = 0; i < trA; i++) {
-				for (var j = 0; j < tdA; j++) {
+			for (let i = 0; i < trA; i++) {
+				for (let j = 0; j < tdA; j++) {
 					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 				}
 			}
 		} else {
-			for (var i = 0; i < trB; i++) {
-				for (var j = 0; j < tdB; j++) {
+			for (let i = 0; i < trB; i++) {
+				for (let j = 0; j < tdB; j++) {
 					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 				}
 			}

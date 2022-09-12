@@ -2,7 +2,7 @@ import { inserTable, generateTable, getValMatrix, setValMatrix } from './table.j
 import EventEmitter from './util.js';
 import { multiplyMatrix } from './matrix.js';
 
-let emitter = new EventEmitter();
+const emitter = new EventEmitter();
 
 // Матрицы
 const matA = document.querySelector('#matA');
@@ -100,8 +100,7 @@ removeTd.addEventListener('click', (event) => {
 		if(radioMatA.checked){
 			inserTable(trA, --tdA, trB, tdB);
 		} else {
-			inserTable(trA, tdA, trB,
-				--tdB);
+			inserTable(trA, tdA, trB, --tdB);
 		}
 		// setValMatrix(matrixVal[0], 'matA');
 		// setValMatrix(matrixVal[1], 'matB');
@@ -116,8 +115,8 @@ removeTd.addEventListener('click', (event) => {
 const multMatrix = document.querySelector('#mult-matrix');
 multMatrix.addEventListener("click", (event) => {
 	if( tdA == trB ){
-		var valMatrixAB = getValMatrix();
-		var result = multiplyMatrix(valMatrixAB[0], valMatrixAB[1]);
+		let valMatrixAB = getValMatrix();
+		let result = multiplyMatrix(valMatrixAB[0], valMatrixAB[1]);
 		setValMatrix(result, 'matC');
 		return true;
 	} else {
@@ -201,7 +200,7 @@ swapMatrix.addEventListener("click", (event) => {
 	// 	$('#block-control').addClass('error-mes');
 	// 	$('#error-matrix').text('Менять местами матрицы можно только одинакового размера с одинаковым числом строк и столбцов');
 	// }
-	var matrixVal = getValMatrix();
+	let matrixVal = getValMatrix();
 	inserTable(trB, tdB, trA, tdA);
 	setValMatrix(matrixVal[0], 'matB');
 	setValMatrix(matrixVal[1], 'matA');
