@@ -3,24 +3,26 @@
 	padding: 0;
 	box-sizing: border-box;
 }
-html, body, .container, #block-control{
+html {
 	height: 100%;
 }
 body{
+	padding: 0;
+	height: 100%;
+	min-height: 100%;
 	font: 14px/20px 'SegoeUIRegular', Arial, Helvetica, sans-serif;
 	color:#404040;
 }
 .container{
 	min-width: 960px;
-	display: table;
+	min-height: 100%;
+	display: flex;
 }
 /* Левая колонка */
 #block-control{
-	display: table-cell;
 	padding: 25px 30px;
 	width: 270px;
 	background: #BCBCBC;
-	vertical-align: top;
 }
 #block-control.error-mes{
 	background: #f6c1c0;
@@ -84,9 +86,6 @@ button:disabled, button:disabled:active{
 }
 button .icon{
 	font-size: 15px;
-}
-button .icon:before{
-	
 }
 button .icon-clear:before{
 	content: "\E012";
@@ -283,11 +282,8 @@ button .icon-clear:before{
 }
 /* Правая колонка */
 .block-matrix{
-	vertical-align: top;
-	width: auto;
-	display: table;
 	padding: 0 24px 30px 24px;
-
+	flex: auto;
 }
 table{border-collapse: collapse;}
 .block-matrix .row{

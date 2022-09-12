@@ -1,5 +1,10 @@
 let trA, trB, tdA, tdB; // размеры матриц
 
+// Матрицы
+const matA = document.querySelector('#matA');
+const matB = document.querySelector('#matB');
+const matC = document.querySelector('#matC');
+
 // вставялем таблицы в html
 export function inserTable(itrA, itdA, itrB, itdB) {
 	trA = itrA, tdA = itdA;
