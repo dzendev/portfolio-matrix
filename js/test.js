@@ -1,9 +1,9 @@
 const mA = document.querySelector('#matA');
 const mB = document.querySelector('#matB');
 
-const generateMatrix = document.querySelector('#generate-matrix');
+const generateMatrix = document.querySelector('#l-generate-matrix');
 const div = document.createElement('div');
-div.innerHTML = `<button id="add-data" onclick="addData()">Добавить тестовые данные</button>`;
+div.innerHTML = `<button class="btn" id="add-data" onclick="addData()">Добавить тестовые данные</button>`;
 generateMatrix.append(div);
 
 function addData() {
