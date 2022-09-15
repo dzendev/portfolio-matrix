@@ -8,51 +8,47 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<div class="container">
-		<aside id="block-control">
-			<button id="mult-matrix"><span>Умножить&nbsp;матрицы</span></button>
-			<button id="clean-matrix"><span class="icon icon-clear"></span>Очистить матрицы</button>
-			<button id="swap-matrix"><span class="icon icon-revers"></span>
-			Поменять матрицы местами</button>
-			<div id="generate-matrix">
-				<input type="radio" id="radio-matA" name="matsel" value="matA" checked>
-				<label for="matA">Матрица A</label>
-				<input type="radio" id="radio-matB" name="matsel" value="matB">
-				<label for="matA">Матрица B</label>
+	<div class="l-container">
+		<aside id="l-control">
+			<button id="mult-matrix" class="btn t-green">Умножить&nbsp;матрицы</button>
+			<div id="l-clean-matrix">
+				<button id="clean-matrix" class="btn"><span class="icon icon-clear"></span>Очистить матрицы</button>
 				<br>
-				<button id="add-tr"><span class="icon icon-plus"></span>Добавить</button><button id="remove-tr"><span class="icon icon-minus"></span>Удалить</button>строки
-				<br>
-				<button id="add-td"><span class="icon icon-plus"></span>Добавить</button><button id="remove-td"><span class="icon icon-minus"></span>Удалить</button>столбцы
+				<button id="swap-matrix" class="btn"><span class="icon icon-revers"></span>
+				Поменять матрицы местами</button>
 			</div>
-			<div id="error-matrix"></div>
+			<div id="l-generate-matrix">
+				<label>
+					<input type="radio" id="radio-matA" name="matsel" value="matA" checked>
+					Матрица A
+				</label>
+				<label>
+					<input type="radio" id="radio-matB" name="matsel" value="matB">
+					Матрица B
+				</label>
+				<div id="l-tr">
+					<button id="add-tr" class="btn"><span class="icon icon-plus"></span>Добавить</button>
+					<button id="remove-tr" class="btn"><span class="icon icon-minus"></span>Удалить</button>
+					строки
+					<br>
+					<button id="add-td" class="btn"><span class="icon icon-plus"></span>Добавить</button>
+					<button id="remove-td" class="btn"><span class="icon icon-minus"></span>Удалить</button>
+					столбцы
+				</div>
+			</div>
+			<div id="l-error-matrix"></div>
 		</aside>
-		<div class="block-matrix">
-			<div class="row">
-				<div class="wrap-matrix">
-					<div class="lwm"></div>
-					<div class="cwm">
-						<div id="matC"></div>
-					</div>
-					<div class="rwm"></div>
-				</div>
-				<div class="wrap-matrix">
-					<div class="lwm"></div>
-					<div class="cwm">
-						<div id="matA"></div>
-					</div>
-					<div class="rwm"></div>
-					<div class="name-matrix">A</div>
-				</div>
+		<div class="l-matrix">
+			<div class="matrix">
+				<div id="matC"></div>
 			</div>
-			<div class="row">
-				<div class="wrap-matrix">
-					<div class="lwm"></div>
-					<div class="cwm">
-						<div id="matB"></div>
-						<div class="name-matrix">B</div>
-					</div>
-					<div class="rwm"></div>
-				</div>
+			<div class="matrix">
+				<div id="matA"></div>
+				<div class="matrix__name">A</div>
+			</div>
+			<div class="matrix">
+				<div id="matB"></div>
+				<div class="matrix__name">B</div>
 			</div>
 		</div>
 	</div>

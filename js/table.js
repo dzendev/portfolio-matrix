@@ -22,7 +22,7 @@ export function generateTable(tr, td, tableName) {
 		for (let j = 0; j < td; j++) {
 			strTable += '<td><input type="text" value="" placeholder="' + tableName + i + j + '" ' + (tableName == 'c' ? ' disabled' : '') + '></td>';
 		}
-		 strTable += "</tr>";
+		strTable += "</tr>";
 	}
 	return strTable += "</table>";
 }

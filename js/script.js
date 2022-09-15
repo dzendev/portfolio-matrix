@@ -5,35 +5,35 @@ import { multiplyMatrix } from './matrix.js';
 const emitter = new EventEmitter();
 
 // секция с элементами управления
-const blockControl = document.querySelector('#block-control');
+const blockControl = document.querySelector('#l-control');
 // вывод ошибок
-const errorMatrix = document.querySelector('#error-matrix');
+const errorMatrix = document.querySelector('#l-error-matrix');
 // переключение между матрицами A и B
 const radioMatA = document.querySelector('#radio-matA');
 // кнопки на боковой панели
-const btn = document.querySelectorAll('button');
+const btn = document.querySelectorAll('.btn');
 
 /* События */
 emitter.on('error-matrix', data => {
-	blockControl.classList.add('error-mes');
+	blockControl.classList.add('is-error');
 	errorMatrix.innerText = data.textError;
 });
 
 emitter.on('valid-matrix', () => {
-	blockControl.classList.remove('error-mes');
+	blockControl.classList.remove('is-error');
 	errorMatrix.innerText = '';
 });
 
 emitter.on('error-input', data => {
-	blockControl.classList.remove('focus-bg');
-	blockControl.classList.add('error-mes');
+	blockControl.classList.remove('is-active');
+	blockControl.classList.add('is-error');
 	errorMatrix.innerText = data.textError;
 	btn.forEach(button => button.setAttribute("disabled", "disabled"))
 });
 
 emitter.on('valid-input', () => {
-	blockControl.classList.remove('error-mes');
-	blockControl.classList.remove('focus-bg');
+	blockControl.classList.remove('is-error');
+	blockControl.classList.remove('is-active');
 	errorMatrix.innerText = '';
 	btn.forEach(button => button.removeAttribute("disabled"))
 });
@@ -139,10 +139,10 @@ document.querySelector('#clean-matrix').addEventListener("click", () => {
 });
 
 /* Делегирование событий для ввода значений матриц */
-document.querySelector('.block-matrix').onclick = function(event) {
+document.querySelector('.l-matrix').onclick = function(event) {
 	let input = event.target.closest('input'); // (1)
 	if (!input) return; // (2)
-	blockControl.classList.add('focus-bg');
+	blockControl.classList.add('is-active');
 	validInput(input); // (4)
 };
 
@@ -155,20 +155,20 @@ document.querySelector('.block-matrix').onclick = function(event) {
 function validInput(input) {
 	input.oninput = function(){
 		if (isNaN(input.value)) { // введено не число
-			input.classList.add('error-valid'); // красная рамка
+			input.classList.add('is-error'); // красная рамка
 			input.focus(); // фокус всегда будет на инпуте пока не будет введено число
 			emitter.emit('error-input', {textError: 'Введено не число' });
 			return;
 		}
 
 		if(input.value < -10 || input.value > 10){
-			input.classList.add('error-valid'); // красная рамка
+			input.classList.add('is-error'); // красная рамка
 			input.focus(); // фокус всегда будет на инпуте пока не будет введено число
 			emitter.emit('error-input', {textError: 'Число должно быть от -10 до 10' });
 			return;
 		}
 
-		input.classList.remove('error-valid'); // красная рамка
+		input.classList.remove('is-error'); // красная рамка
 		emitter.emit('valid-input', {textError: 'Число должно быть от -10 до 10' });
 	};
 }
