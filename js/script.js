@@ -30,6 +30,8 @@ emitter.on('valid-matrix', () => {
 });
 
 emitter.on('error-input', data => {
+	data.input.classList.add('is-error'); // красная рамка
+	data.input.focus(); // фокус всегда будет на инпуте пока не будет введено число
 	blockControl.classList.remove('is-active');
 	blockControl.classList.add('is-error');
 	errorMatrix.innerText = data.textError;
@@ -45,7 +47,7 @@ emitter.on('valid-input', () => {
 
 /* Добавление строк */
 document.querySelector('#add-tr').addEventListener('click', () => {
-	if((table.trA + 1) >= 2 && (table.trA + 1) <= 10 && (table.trB + 1) >= 2 && (table.trB + 1) <= 10){
+	if((table.trA + 1) <= 10 && (table.trB + 1) <= 10){
 		if(radioMatA.checked){
 			++table.trA;
 		} else {
@@ -54,14 +56,14 @@ document.querySelector('#add-tr').addEventListener('click', () => {
 		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
-		emitter.emit('error-matrix', {textError: "Число строк должно быть в диапазоне от 2 до 10"});
+		emitter.emit('error-matrix', {textError: "Число строк должно быть не больше 10"});
 	}
 	return false;
 });
 
 /* Удаление строк */
 document.querySelector('#remove-tr').addEventListener('click', () => {
-	if((table.trA - 1) >= 2 && (table.trA - 1) <= 10 && (table.trB - 1) >= 2 && (table.trB - 1) <= 10){
+	if((table.trA - 1) >= 2 && (table.trB - 1) >= 2){
 		if(radioMatA.checked){
 			--table.trA;
 		} else {
@@ -70,14 +72,14 @@ document.querySelector('#remove-tr').addEventListener('click', () => {
 		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
-		emitter.emit('error-matrix', {textError: "Число строк должно быть в диапазоне от 2 до 10"});
+		emitter.emit('error-matrix', {textError: "Число строк должно быть не меньше 2"});
 	}
 	return false;
 });
 
 /* Добавление столбцов */
 document.querySelector('#add-td').addEventListener('click', () => {
-	if((table.tdA + 1) >= 2 && (table.tdA + 1) <= 10 && (table.tdB + 1) >= 2 && (table.tdB + 1) <= 10){
+	if((table.tdA + 1) <= 10 && (table.tdB + 1) <= 10){
 		if(radioMatA.checked){
 			++table.tdA;
 		} else {
@@ -86,14 +88,14 @@ document.querySelector('#add-td').addEventListener('click', () => {
 		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
-		emitter.emit('error-matrix', {textError: "Число столбцов должно быть в диапазоне от 2 до 10"});
+		emitter.emit('error-matrix', {textError: "Число столбцов должно быть не больше 10"});
 	}
 	return false;
 });
 
 /* Удаление столбцов */
 document.querySelector('#remove-td').addEventListener('click', () => {
-	if((table.tdA - 1) >= 2 && (table.tdA - 1) <= 10 && (table.tdB - 1) >= 2 && (table.tdB - 1) <= 10){
+	if((table.tdA - 1) >= 2 && (table.tdB - 1) >= 2){
 		if(radioMatA.checked){
 			--table.tdA;
 		} else {
@@ -102,7 +104,7 @@ document.querySelector('#remove-td').addEventListener('click', () => {
 		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
-		emitter.emit('error-matrix', {textError: "Число столбцов должно быть в диапазоне от 2 до 10"});
+		emitter.emit('error-matrix', {textError: "Число столбцов должно быть не меньше 10"});
 	}
 	return false;
 });
@@ -149,26 +151,22 @@ document.querySelector('.l-matrix').onclick = function(event) {
 /*
 	Подсветка колонки при фокусе на инпуте
 	Валидация
-	0. Должно быть введено число
+	0. Должно быть введено целое число
 	1. Число должно быть от -10 до 10
 */
 function validInput(input) {
 	input.oninput = function(){
-		if (isNaN(input.value)) { // введено не число
-			input.classList.add('is-error'); // красная рамка
-			input.focus(); // фокус всегда будет на инпуте пока не будет введено число
-			emitter.emit('error-input', {textError: 'Введено не число' });
+		if (!Number.isInteger(Number(input.value))) { // введено не число
+			emitter.emit('error-input', {input, textError: 'Введено не целое число' });
 			return;
 		}
 
 		if(input.value < -10 || input.value > 10){
-			input.classList.add('is-error'); // красная рамка
-			input.focus(); // фокус всегда будет на инпуте пока не будет введено число
-			emitter.emit('error-input', {textError: 'Число должно быть от -10 до 10' });
+			emitter.emit('error-input', {input, textError: 'Число должно быть от -10 до 10' });
 			return;
 		}
 
 		input.classList.remove('is-error'); // красная рамка
-		emitter.emit('valid-input', {textError: 'Число должно быть от -10 до 10' });
+		emitter.emit('valid-input');
 	};
 }
