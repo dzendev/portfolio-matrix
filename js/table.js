@@ -1,78 +1,72 @@
-let trA, trB, tdA, tdB; // размеры матриц
-
-// Матрицы
-const matA = document.querySelector('#matA');
-const matB = document.querySelector('#matB');
-const matC = document.querySelector('#matC');
-
-// вставялем таблицы в html
-export function inserTable(itrA, itdA, itrB, itdB) {
-	trA = itrA, tdA = itdA;
-	trB = itrB, tdB = itdB;
-	matA.innerHTML = generateTable(trA, tdA, 'a');
-	matB.innerHTML = generateTable(trB, tdB, 'b');
-	matC.innerHTML = generateTable(trA, tdB, 'c');
-}
-
-// генерация таблицы
-export function generateTable(tr, td, tableName) {
-	let strTable = '<table>';
-	for (let i = 0; i < tr; i++) {
-		strTable += "<tr>";
-		for (let j = 0; j < td; j++) {
-			strTable += '<td><input type="text" value="" placeholder="' + tableName + i + j + '" ' + (tableName == 'c' ? ' disabled' : '') + '></td>';
-		}
-		strTable += "</tr>";
+export default class Table {
+	constructor (trA, trB, tdA, tdB) {
+		this.trA = trA;
+		this.trB = trB;
+		this.tdA = tdA;
+		this.tdB = tdB;
+		this.matA = document.querySelector('#matA');
+		this.matB = document.querySelector('#matB');
+		this.matC = document.querySelector('#matC');
 	}
-	return strTable += "</table>";
-}
-
-// Получить значение матриц
-export function getValMatrix() {
-	const matrixAinput = document.querySelectorAll('#matA tr');
-	const matrixBinput = document.querySelectorAll('#matB tr');
-	let matrixA = [];
-	let matrixB = [];
-	let martixAB = [];
-	for (let i = 0; i < trA; i++) {
-		matrixA[i] = []
-		for (let j = 0; j < tdA; j++) {
-			// если значение будет равно пустой строке,
-			// то во время умножения оно будет преобразовано
-			// к числовому типу и станет равна 0
-			// особенность javascript
-			matrixA[i][j] = matrixAinput[i].querySelectorAll("input")[j].value;
-		}
+	insert() {
+		this.matA.innerHTML = this.#generate(this.trA, this.tdA, 'a');
+		this.matB.innerHTML = this.#generate(this.trB, this.tdB, 'b');
+		this.matC.innerHTML = this.#generate(this.trA, this.tdB, 'c');
 	}
-	for (let i = 0; i < trB; i++) {
-		matrixB[i] = []
-		for (let j = 0; j < tdB; j++) {
-			matrixB[i][j] = matrixBinput[i].querySelectorAll("input")[j].value;
+	#generate(tr, td, tableName) {
+		let strTable = '<table>';
+		for (let i = 0; i < tr; i++) {
+			strTable += "<tr>";
+			for (let j = 0; j < td; j++) {
+				strTable += '<td><input type="text" value="" placeholder="' + tableName + i + j + '" ' + (tableName == 'c' ? ' disabled' : '') + '></td>';
+			}
+			strTable += "</tr>";
 		}
+		return strTable += "</table>";
 	}
-	return martixAB = [matrixA , matrixB];
-}
-
-// Вывести результат умножения
-export function setValMatrix(matrix, nameMatrix) {
-	let matrixInput = document.querySelectorAll(`#${nameMatrix} tr`);
-	if(nameMatrix == 'matC'){
-		for (let i = 0; i < trA; i++) {
-			for (let j = 0; j < tdB; j++) {
-				matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
+	getValMatrix() {
+		const matrixAinput = document.querySelectorAll('#matA tr');
+		const matrixBinput = document.querySelectorAll('#matB tr');
+		let matrixA = [];
+		let matrixB = [];
+		for (let i = 0; i < this.trA; i++) {
+			matrixA[i] = []
+			for (let j = 0; j < this.tdA; j++) {
+				// если значение будет равно пустой строке,
+				// то во время умножения оно будет преобразовано
+				// к числовому типу и станет равна 0
+				// особенность javascript
+				matrixA[i][j] = matrixAinput[i].querySelectorAll("input")[j].value;
 			}
 		}
-	} else {
-		if(nameMatrix == 'matA'){
-			for (let i = 0; i < trA; i++) {
-				for (let j = 0; j < tdA; j++) {
+		for (let i = 0; i < this.trB; i++) {
+			matrixB[i] = []
+			for (let j = 0; j < this.tdB; j++) {
+				matrixB[i][j] = matrixBinput[i].querySelectorAll("input")[j].value;
+			}
+		}
+		return [matrixA , matrixB];
+	}
+	setValMatrix(matrix, nameMatrix) {
+		let matrixInput = document.querySelectorAll(`#${nameMatrix} tr`);
+		if(nameMatrix == 'matC'){
+			for (let i = 0; i < this.trA; i++) {
+				for (let j = 0; j < this.tdB; j++) {
 					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
 				}
 			}
 		} else {
-			for (let i = 0; i < trB; i++) {
-				for (let j = 0; j < tdB; j++) {
-					matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
+			if(nameMatrix == 'matA'){
+				for (let i = 0; i < this.trA; i++) {
+					for (let j = 0; j < this.tdA; j++) {
+						matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
+					}
+				}
+			} else {
+				for (let i = 0; i < this.trB; i++) {
+					for (let j = 0; j < this.tdB; j++) {
+						matrixInput[i].querySelectorAll("input")[j].value = matrix[i][j];
+					}
 				}
 			}
 		}

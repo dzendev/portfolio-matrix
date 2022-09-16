@@ -1,8 +1,11 @@
-import { inserTable, getValMatrix, setValMatrix } from './table.js';
+import Table from './table.js';
 import EventEmitter from './util.js';
 import { multiplyMatrix } from './matrix.js';
 
-const emitter = new EventEmitter();
+/* начальные размеры матриц 4x4 */
+const table = new Table(4, 4, 4, 4);
+/* Генерируем начальные матрицы */
+table.insert();
 
 // секция с элементами управления
 const blockControl = document.querySelector('#l-control');
@@ -14,6 +17,8 @@ const radioMatA = document.querySelector('#radio-matA');
 const btn = document.querySelectorAll('.btn');
 
 /* События */
+const emitter = new EventEmitter();
+
 emitter.on('error-matrix', data => {
 	blockControl.classList.add('is-error');
 	errorMatrix.innerText = data.textError;
@@ -38,23 +43,15 @@ emitter.on('valid-input', () => {
 	btn.forEach(button => button.removeAttribute("disabled"))
 });
 
-/* Размер матрицы */
-let trA = 4;
-let tdA = 4;
-let trB = 4;
-let tdB = 4;
-
-/* Генерируем начальные матрицы */
-inserTable(trA, tdA, trB, tdB);
-
 /* Добавление строк */
 document.querySelector('#add-tr').addEventListener('click', () => {
-	if((trA + 1) >= 2 && (trA + 1) <= 10 && (trB + 1) >= 2 && (trB + 1) <= 10){
+	if((table.trA + 1) >= 2 && (table.trA + 1) <= 10 && (table.trB + 1) >= 2 && (table.trB + 1) <= 10){
 		if(radioMatA.checked){
-			inserTable(++trA, tdA, trB, tdB);
+			++table.trA;
 		} else {
-			inserTable(trA, tdA, ++trB, tdB);
+			++table.trB;
 		}
+		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
 		emitter.emit('error-matrix', {textError: "Число строк должно быть в диапазоне от 2 до 10"});
@@ -64,12 +61,13 @@ document.querySelector('#add-tr').addEventListener('click', () => {
 
 /* Удаление строк */
 document.querySelector('#remove-tr').addEventListener('click', () => {
-	if((trA - 1) >= 2 && (trA - 1) <= 10 && (trB - 1) >= 2 && (trB - 1) <= 10){
+	if((table.trA - 1) >= 2 && (table.trA - 1) <= 10 && (table.trB - 1) >= 2 && (table.trB - 1) <= 10){
 		if(radioMatA.checked){
-			inserTable(--trA, tdA, trB, tdB);
+			--table.trA;
 		} else {
-			inserTable(trA, tdA, --trB, tdB);
+			--table.trB;
 		}
+		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
 		emitter.emit('error-matrix', {textError: "Число строк должно быть в диапазоне от 2 до 10"});
@@ -79,12 +77,13 @@ document.querySelector('#remove-tr').addEventListener('click', () => {
 
 /* Добавление столбцов */
 document.querySelector('#add-td').addEventListener('click', () => {
-	if((tdA + 1) >= 2 && (tdA + 1) <= 10 && (tdB + 1) >= 2 && (tdB + 1) <= 10){
+	if((table.tdA + 1) >= 2 && (table.tdA + 1) <= 10 && (table.tdB + 1) >= 2 && (table.tdB + 1) <= 10){
 		if(radioMatA.checked){
-			inserTable(trA, ++tdA, trB, tdB);
+			++table.tdA;
 		} else {
-			inserTable(trA, tdA, trB, ++tdB);
+			++table.tdB;
 		}
+		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
 		emitter.emit('error-matrix', {textError: "Число столбцов должно быть в диапазоне от 2 до 10"});
@@ -94,12 +93,13 @@ document.querySelector('#add-td').addEventListener('click', () => {
 
 /* Удаление столбцов */
 document.querySelector('#remove-td').addEventListener('click', () => {
-	if((tdA - 1) >= 2 && (tdA - 1) <= 10 && (tdB - 1) >= 2 && (tdB - 1) <= 10){
+	if((table.tdA - 1) >= 2 && (table.tdA - 1) <= 10 && (table.tdB - 1) >= 2 && (table.tdB - 1) <= 10){
 		if(radioMatA.checked){
-			inserTable(trA, --tdA, trB, tdB);
+			--table.tdA;
 		} else {
-			inserTable(trA, tdA, trB, --tdB);
+			--table.tdB;
 		}
+		table.insert();
 		emitter.emit('valid-matrix');
 	} else {
 		emitter.emit('error-matrix', {textError: "Число столбцов должно быть в диапазоне от 2 до 10"});
@@ -109,11 +109,11 @@ document.querySelector('#remove-td').addEventListener('click', () => {
 
 /* Поменять матрицы местами */
 document.querySelector('#swap-matrix').addEventListener("click", () => {
-	if(trA == tdA && trB == tdB && trA == trB){
-		let matrixVal = getValMatrix();
-		inserTable(trB, tdB, trA, tdA);
-		setValMatrix(matrixVal[0], 'matB');
-		setValMatrix(matrixVal[1], 'matA');
+	if(table.trA == table.tdA && table.trB == table.tdB && table.trA == table.trB){
+		let matrixVal = table.getValMatrix();
+		table.insert();
+		table.setValMatrix(matrixVal[0], 'matB');
+		table.setValMatrix(matrixVal[1], 'matA');
 		emitter.emit('valid-matrix');
 	} else {
 		emitter.emit('error-matrix', {textError: "Менять местами матрицы можно только одинакового размера с одинаковым числом строк и столбцов"})
@@ -122,10 +122,10 @@ document.querySelector('#swap-matrix').addEventListener("click", () => {
 
 /* Перемножить матрицы */
 document.querySelector('#mult-matrix').addEventListener("click", () => {
-	if( tdA == trB ){
-		let valMatrixAB = getValMatrix();
+	if( table.tdA == table.trB ){
+		let valMatrixAB = table.getValMatrix();
 		let result = multiplyMatrix(valMatrixAB[0], valMatrixAB[1]);
-		setValMatrix(result, 'matC');
+		table.setValMatrix(result, 'matC');
 		return true;
 	} else {
 		emitter.emit('error-matrix', {textError: "Число столбцов первой матрицы должно равняться числу строк второй матрицы"});
@@ -135,7 +135,7 @@ document.querySelector('#mult-matrix').addEventListener("click", () => {
 
 /* Очистить матрицы */
 document.querySelector('#clean-matrix').addEventListener("click", () => {
-	inserTable(trA, tdA, trB, tdB);
+	table.insert();
 });
 
 /* Делегирование событий для ввода значений матриц */
