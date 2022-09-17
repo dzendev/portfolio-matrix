@@ -270,7 +270,7 @@ input[type=text]{
 	cursor: default;
 }
 .btn.t-green:disabled:before{
-	border-bottom: 1px solid #DEDEDE;
+	border-top: 1px solid #DEDEDE;
 	border-right: 1px solid #DEDEDE;
 	background: #F2F2F2;
 	box-shadow: none;
