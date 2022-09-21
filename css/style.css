@@ -262,6 +262,16 @@ input[type=text]{
 		2px -2px 0 1px #BCBCBC,
 		4px -4px 0 2px #48a51a;
 }
+#l-control.is-active .btn.btn.t-green:focus {
+	box-shadow:
+		0 0 0 3px #5199db,
+		0px 0px 0px 6px #48a51a;
+}
+#l-control.is-active .btn.btn.t-green:focus::before {
+	box-shadow:
+		2px -2px 0 1px #5199db,
+		4px -4px 0 2px #48a51a;
+}
 .btn.t-green:disabled, .btn.t-green:disabled:active{
 	border: 1px solid #DEDEDE;
 	background: #F2F2F2;
