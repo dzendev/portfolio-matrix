@@ -1,5 +1,4 @@
 import Table from './table.js';
-import EventEmitter from './util.js';
 import { multiplyMatrix } from './matrix.js';
 
 /* начальные размеры матриц 4x4 */
@@ -10,40 +9,19 @@ table.insert();
 // секция с элементами управления
 const blockControl = document.querySelector('#l-control');
 // вывод ошибок
-const errorMatrix = document.querySelector('#l-error-matrix');
+const blockErrorMatrix = document.querySelector('#l-error-matrix');
 // переключение между матрицами A и B
 const radioMatA = document.querySelector('#radio-matA');
-// кнопки на боковой панели
-const btn = document.querySelectorAll('.btn');
 
-/* События */
-const emitter = new EventEmitter();
-
-emitter.on('error-matrix', data => {
+const errorMatrix = (textError) => {
 	blockControl.classList.add('is-error');
-	errorMatrix.innerText = data.textError;
-});
+	blockErrorMatrix.innerText = textError;
+}
 
-emitter.on('valid-matrix', () => {
+const validMatrix = () => {
 	blockControl.classList.remove('is-error');
-	errorMatrix.innerText = '';
-});
-
-emitter.on('error-input', data => {
-	data.input.classList.add('is-error'); // красная рамка
-	data.input.focus(); // фокус всегда будет на инпуте пока не будет введено число
-	blockControl.classList.remove('is-active');
-	blockControl.classList.add('is-error');
-	errorMatrix.innerText = data.textError;
-	btn.forEach(button => button.setAttribute("disabled", "disabled"))
-});
-
-emitter.on('valid-input', () => {
-	blockControl.classList.remove('is-error');
-	blockControl.classList.remove('is-active');
-	errorMatrix.innerText = '';
-	btn.forEach(button => button.removeAttribute("disabled"))
-});
+	blockErrorMatrix.innerText = '';
+}
 
 /* Добавление строк */
 document.querySelector('#add-tr').addEventListener('click', () => {
@@ -54,9 +32,9 @@ document.querySelector('#add-tr').addEventListener('click', () => {
 			++table.trB;
 		}
 		table.insert();
-		emitter.emit('valid-matrix');
+		validMatrix();
 	} else {
-		emitter.emit('error-matrix', {textError: "Число строк должно быть не больше 10"});
+		errorMatrix("Число строк должно быть не больше 10")
 	}
 	return false;
 });
@@ -70,9 +48,9 @@ document.querySelector('#remove-tr').addEventListener('click', () => {
 			--table.trB;
 		}
 		table.insert();
-		emitter.emit('valid-matrix');
+		validMatrix();
 	} else {
-		emitter.emit('error-matrix', {textError: "Число строк должно быть не меньше 2"});
+		errorMatrix("Число строк должно быть не меньше 2")
 	}
 	return false;
 });
@@ -86,9 +64,9 @@ document.querySelector('#add-td').addEventListener('click', () => {
 			++table.tdB;
 		}
 		table.insert();
-		emitter.emit('valid-matrix');
+		validMatrix();
 	} else {
-		emitter.emit('error-matrix', {textError: "Число столбцов должно быть не больше 10"});
+		errorMatrix("Число столбцов должно быть не больше 10")
 	}
 	return false;
 });
@@ -102,9 +80,9 @@ document.querySelector('#remove-td').addEventListener('click', () => {
 			--table.tdB;
 		}
 		table.insert();
-		emitter.emit('valid-matrix');
+		validMatrix();
 	} else {
-		emitter.emit('error-matrix', {textError: "Число столбцов должно быть не меньше 10"});
+		errorMatrix("Число столбцов должно быть не меньше 10")
 	}
 	return false;
 });
@@ -116,9 +94,9 @@ document.querySelector('#swap-matrix').addEventListener("click", () => {
 		table.insert();
 		table.setValMatrix(matrixVal[0], 'matB');
 		table.setValMatrix(matrixVal[1], 'matA');
-		emitter.emit('valid-matrix');
+		validMatrix();
 	} else {
-		emitter.emit('error-matrix', {textError: "Менять местами матрицы можно только одинакового размера с одинаковым числом строк и столбцов"})
+		errorMatrix("Менять местами матрицы можно только одинакового размера с одинаковым числом строк и столбцов")
 	}
 });
 
@@ -130,7 +108,7 @@ document.querySelector('#mult-matrix').addEventListener("click", () => {
 		table.setValMatrix(result, 'matC');
 		return true;
 	} else {
-		emitter.emit('error-matrix', {textError: "Число столбцов первой матрицы должно равняться числу строк второй матрицы"});
+		errorMatrix("Число столбцов первой матрицы должно равняться числу строк второй матрицы");
 		return false;
 	}
 });
@@ -140,12 +118,26 @@ document.querySelector('#clean-matrix').addEventListener("click", () => {
 	table.insert();
 });
 
+// кнопки на боковой панели
+const btns = document.querySelectorAll('.btn');
+
+const errorInput = (textError, input) => {
+	input.classList.add('is-error'); // красная рамка
+	input.focus(); // фокус всегда будет на инпуте пока не будет введено число
+	errorMatrix(textError);
+	btns.forEach(button => button.setAttribute("disabled", "disabled"))
+};
+
+const validInput = () => {
+	validMatrix();
+	btns.forEach(button => button.removeAttribute("disabled"))
+};
+
 /* Делегирование событий для ввода значений матриц */
 document.querySelector('.l-matrix').onclick = function(event) {
-	let input = event.target.closest('input'); // (1)
-	if (!input) return; // (2)
-	blockControl.classList.add('is-active');
-	validInput(input); // (4)
+	let input = event.target.closest('input');
+	if (!input) return;
+	validValue(input);
 };
 
 /*
@@ -154,19 +146,19 @@ document.querySelector('.l-matrix').onclick = function(event) {
 	0. Должно быть введено целое число
 	1. Число должно быть от -10 до 10
 */
-function validInput(input) {
+function validValue(input) {
 	input.oninput = function(){
 		if (!Number.isInteger(Number(input.value))) { // введено не число
-			emitter.emit('error-input', {input, textError: 'Введено не целое число' });
+			errorInput("Введено не целое число", input)
 			return;
 		}
 
 		if(input.value < -10 || input.value > 10){
-			emitter.emit('error-input', {input, textError: 'Число должно быть от -10 до 10' });
+			errorInput("Число должно быть от -10 до 10", input)
 			return;
 		}
 
 		input.classList.remove('is-error'); // красная рамка
-		emitter.emit('valid-input');
+		validInput();
 	};
 }
