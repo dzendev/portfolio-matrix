@@ -44,9 +44,6 @@ input[type=text]{
 #l-control.is-error{
 	background: #f6c1c0;
 }
-#l-control.is-active{
-	background: #5199db !important;
-}
 #l-control #l-generate-matrix{
 	margin-top: 62px;
 }
