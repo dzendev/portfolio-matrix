@@ -100,13 +100,32 @@ document.querySelector('#swap-matrix').addEventListener("click", () => {
 	}
 });
 
+/* Проверка заполнены ли значения матриц */
+function isValueNotEmpty() {
+	const inputsMatrix = document.querySelectorAll(".l-matrix input:enabled");
+
+	let isValid = true;
+	for (let i = 0; i < inputsMatrix.length; i++) {
+		if(inputsMatrix[i].value === '') {
+			inputsMatrix[i].classList.add('is-error');
+			isValid = false;
+		}
+	}
+	return isValid;
+}
+
 /* Перемножить матрицы */
 document.querySelector('#mult-matrix').addEventListener("click", () => {
 	if( table.tdA == table.trB ){
-		let valMatrixAB = table.getValMatrix();
-		let result = multiplyMatrix(valMatrixAB[0], valMatrixAB[1]);
-		table.setValMatrix(result, 'matC');
-		return true;
+		if (isValueNotEmpty() === true) {
+			let valMatrixAB = table.getValMatrix();
+			let result = multiplyMatrix(valMatrixAB[0], valMatrixAB[1]);
+			table.setValMatrix(result, 'matC');
+			return true;
+		} else {
+			errorMatrix("Значения полей перемножаемых матриц должны быть заполнены");
+			return false;
+		}
 	} else {
 		errorMatrix("Число столбцов первой матрицы должно равняться числу строк второй матрицы");
 		return false;
